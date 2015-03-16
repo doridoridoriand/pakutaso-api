@@ -9,7 +9,7 @@ class EntryUrlGetter
       arr << get_all_item_url(list)
       sleep(10)
     end
-    return arr.uniq.flatten
+    arr.uniq.flatten
   end
 
   def get_all_item_url(target_items_url)
