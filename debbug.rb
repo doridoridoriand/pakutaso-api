@@ -1,21 +1,25 @@
 require 'mechanize'
 require 'pp'
+require 'json'
 
 class AAA
-#  def picker
-#    agent = Mechanize.new
-#    array = []
-#    source = agent.get('http://www.pakutaso.com/news_2.html')
-#    source.search('div#photoList').search('ul').search('li.entries__item').search('a').each do |element|
-#      element.attributes.each do |entry|
-#        if entry[1].value.include?('.html') && entry[1].value.include?('post')
-#          array << entry[1].value
-#        end
-#      end
-#    end
-#    pp array.reject { |item| item.include?('twitter') || item.include?('facebook') || item.include?('google') }
-#    #pp array
-#  end
+  def picker
+    agent = Mechanize.new
+    source = agent.get('http://www.pakutaso.com/20150312075post-5281.html')
+    keywords = []
+    source.search('//dd[@class="entryTags__description"]/a/span/text()').map do |element|
+      keywords << element.text
+    end
+    title = source.search('//title')[0].children[0].text.split('｜')[0]
+    img = source.search('//dd[@class="download__btn"]/a[last()]/@href')[0].value
+
+    data = {
+      :title => title,
+      :keywords => keywords,
+      :img => img
+    }
+    puts JSON.pretty_generate(data)
+  end
 end
 
 aaa = AAA.new
